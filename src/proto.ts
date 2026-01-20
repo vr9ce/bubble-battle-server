@@ -35,7 +35,7 @@ export type Bubble = {
 	Kinematic: Kinematic,
 }
 
-type ServerMessageRaw = {
+export type ServerMessageRaw = {
 	Bubbles: Record<string, Bubble & {Skin?: any}>,
 	Players: string[],
 }

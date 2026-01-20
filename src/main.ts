@@ -5,13 +5,14 @@ import {
 import type {
     ClientMessage,
     ServerMessage,
+    ServerMessageRaw,
 } from './proto.js'
 import {Game} from './game.js'
 
 const sockets = new Set<WebSocket>()
-function Broadcast(msg: ServerMessage) {
+function Broadcast(msg: ServerMessageRaw) {
     for (const ws of sockets)
-        ws.send(JSON.stringify(msg))
+        ws.send(JSON.stringify({...msg, Timestamp: Date.now()} as ServerMessage))
 }
 
 
