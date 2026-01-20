@@ -29,7 +29,7 @@ type Kinematic = {
 	Speed: number,
 }
 
-type Bubble = {
+export type Bubble = {
 	ID: string,
 	Body: BubbleBody,
 	Kinematic: Kinematic,
