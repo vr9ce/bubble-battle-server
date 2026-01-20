@@ -20,12 +20,20 @@ const game = new Game(Broadcast)
 
 new WebSocketServer({
     port: WEBSOCKET_PORT
-}).on('connection', ws => {
-    console.info('New client connected')
+}).on('connection', function() {
+    let cnt: number = 0
+    return ws => {
+        console.log('New client connected', ++cnt)
 
-    sockets.add(ws)
-    ws.onmessage = event => {
-        const msg: ClientMessage = JSON.parse(event.data.toString())
-        game.Execute(msg)
+        sockets.add(ws)
+        ws.onclose = () => {
+            console.log('Client disconnected')
+            sockets.delete(ws)
+        }
+
+        ws.onmessage = event => {
+            const msg: ClientMessage = JSON.parse(event.data.toString())
+            game.Execute(msg)
+        }
     }
-})
+}())

@@ -6,16 +6,15 @@ import type {
 import {
     INIT_NUM_NPC_BUBBLES,
     MAP_HEIGHT, MAP_WIDTH,
+    GAME_TICKS,
     PLAYER_INIT_RADIUS,
 } from './config.js'
 
 export class Game {
     readonly Bubbles = new Map<string, Bubble>
-    readonly Updater: (msg: ServerMessageRaw) => void
+    readonly Players = new Set<string>()
 
     constructor(status_reporter: (msg: ServerMessageRaw) => void) {
-        this.Updater = status_reporter
-
         // init npc bubbles
         while (this.Bubbles.size < INIT_NUM_NPC_BUBBLES) {
             const id = Math.random().toString(36).slice(2)
@@ -41,14 +40,22 @@ export class Game {
                 Body: body,
                 Kinematic: kinematic,
             })
+
+            console.log(`Initialized No.${this.Bubbles.size} NPC, ID=${id}`)
         }
 
-        this.Updater({
-            Bubbles: Object.fromEntries(this.Bubbles),
-            Players: [],
-        })
+        setInterval(
+            () => status_reporter({
+                Bubbles: Object.fromEntries(this.Bubbles),
+                Players: Array.from(this.Players),
+            }),
+            1000 / GAME_TICKS
+        )
     }
     Execute(cmd: ClientMessage) {
+        //const timestamp
+        //const {
 
+        //}
     }
 }
