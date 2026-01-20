@@ -13,6 +13,19 @@
 		"eslint": "^9.39.2",
 		"prettier": "3.7.4",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.53.0"
+		"typescript-eslint": "^8.53.0",
+		"ws": "^8.19.0"
+	},
+	"name": "bubble-battle-server",
+	"version": "0.1",
+	"description": "",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/vr9ce/bubble-battle-server.git"
+	},
+	"keywords": [],
+	"license": "GPL-3.0-only",
+	"bugs": {
+		"url": "https://github.com/vr9ce/bubble-battle-server/issues"
 	}
 }
