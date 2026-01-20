@@ -1,1 +1,18 @@
-{}
+{
+	"homepage": "https://github.com/vr9ce/bubble-battle-server",
+	"author": "shynur",
+	"type": "module",
+	"main": "main.js",
+	"scripts": {
+		"pretest": "tsc",
+		"test": "node dist/main.js"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.2",
+		"@types/node": "^25.0.9",
+		"eslint": "^9.39.2",
+		"prettier": "3.7.4",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.53.0"
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"include": [
+		"src/**/*",
+	],
+	"compilerOptions": {
+		"target": "es2024",
+		"outDir": "dist",
+		"module": "NodeNext",
+		"newLine": "lf",
+        "moduleResolution": "nodenext"
+	}
+}
