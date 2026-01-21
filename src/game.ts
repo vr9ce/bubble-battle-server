@@ -9,7 +9,6 @@ import {
     GAME_TICK_PERIOD_MS,
     STOMACH_RADIUS_RATIO,
     MAX_BUBBLE_RADIUS,
-    MAX_SERVER_MSG_PERIOD,
     GetSpeedByRadius,
     PLAYER_INIT_RADIUS,
     X_MAX, Y_MAX,
@@ -169,13 +168,11 @@ export class Game {
             const dead_bubbles = this.LetBubblesEatEachOther()
 
             if (cmd == undefined) {
-                if (dead_bubbles.size || current_timestamp - last_update_timestamp > MAX_SERVER_MSG_PERIOD * 1000) {
-                    this.Updater({
-                        Bubbles: Object.fromEntries([...this.Bubbles].map(([id, bubble]) => [id, bubble.Dump()])),
-                        Players: Array.from(this.Players),
-                    })
-                    last_update_timestamp = current_timestamp
-                }
+                this.Updater({
+                    Bubbles: Object.fromEntries([...this.Bubbles].map(([id, bubble]) => [id, bubble.Dump()])),
+                    Players: Array.from(this.Players),
+                })
+                last_update_timestamp = current_timestamp
                 return
             }
 
@@ -191,11 +188,6 @@ export class Game {
                 user_bubble.Direction = user_direction
                 user_bubble.Speed = GetSpeedByRadius(user_bubble.Radius)
             }
-            this.Updater({
-                Bubbles: Object.fromEntries([...this.Bubbles].map(([id, bubble]) => [id, bubble.Dump()])),
-                Players: Array.from(this.Players),
-            })
-            last_update_timestamp = current_timestamp
         }
     })()
 

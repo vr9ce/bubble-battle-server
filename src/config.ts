@@ -5,7 +5,7 @@ export const GAME_TICK_PERIOD_MS = 1000 / GAME_TICKS
 
 export const [MAP_WIDTH, MAP_HEIGHT] = function(x: number, y: number) {
     return [Math.max(x, y), Math.min(x, y)]
-}(500, 500)
+}(1000, 1000)
 export const [X_MAX, Y_MAX] = [MAP_WIDTH, MAP_HEIGHT].map(v => v / 2)
 export const MAX_BUBBLE_RADIUS = MAP_HEIGHT
 
@@ -25,5 +25,3 @@ export function GetSpeedByRadius(radius: number): number {
     const speed = MAX_SPEED - radius/MAX_BUBBLE_RADIUS * (MAX_SPEED - MIN_SPEED)
     return speed
 }
-
-export const MAX_SERVER_MSG_PERIOD = 2  // seconds
