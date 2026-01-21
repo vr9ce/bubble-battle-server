@@ -33,6 +33,7 @@ new WebSocketServer({
 
         ws.onmessage = event => {
             const msg: ClientMessage = JSON.parse(event.data.toString())
+            console.log('Received message from client:', msg)
             game.Execute(msg)
         }
     }
