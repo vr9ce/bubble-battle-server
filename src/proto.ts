@@ -11,7 +11,7 @@ type BubbleBody = {
 	EatenBy?: string,  // 表示被谁吃了.
 }
 
-type ClientMessageRaw = {
+export type ClientMessageRaw = {
 	User: {
 		ID: string,  // 客户端随机生成
 		Direction: Direction,
@@ -29,14 +29,14 @@ type Kinematic = {
 	Speed: number,
 }
 
-export type Bubble = {
+export type BubbleJSON = {
 	ID: string,
 	Body: BubbleBody,
 	Kinematic: Kinematic,
 }
 
 export type ServerMessageRaw = {
-	Bubbles: Record<string, Bubble & {Skin?: any}>,
+	Bubbles: Record<string, BubbleJSON & {Skin?: any}>,
 	Players: string[],
 }
 
