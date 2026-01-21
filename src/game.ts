@@ -87,8 +87,8 @@ class Bubble {
 
         this.Coordinate[0] += this.Direction[0] * dist
         this.Coordinate[1] += this.Direction[1] * dist
-        this.Coordinate[0] = Math.min(X_MAX, Math.max(-X_MAX, this.Direction[0] * dist))
-        this.Coordinate[1] = Math.min(Y_MAX, Math.max(-Y_MAX, this.Direction[1] * dist))
+        this.Coordinate[0] = Math.min(X_MAX, Math.max(-X_MAX, this.Direction[0]))
+        this.Coordinate[1] = Math.min(Y_MAX, Math.max(-Y_MAX, this.Direction[1]))
     }
 
     NormalizeDirection() {
