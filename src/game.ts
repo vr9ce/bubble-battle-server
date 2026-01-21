@@ -58,7 +58,7 @@ class Bubble {
         if (this.EatenBy != undefined)
             return false
 
-        if (this.Radius <= other.Radius)
+        if (this.Radius >= other.Radius)
             return false
 
         return true
