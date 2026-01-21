@@ -16,6 +16,7 @@ function Broadcast(msg: ServerMessageRaw) {
             ...msg,
             Timestamp: Date.now(),
         } as ServerMessage))
+    console.log('Broadcasted message to', sockets.size, 'clients')
 }
 
 
