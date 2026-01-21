@@ -25,3 +25,5 @@ export function GetSpeedByRadius(radius: number): number {
     const speed = MAX_SPEED - radius/MAX_BUBBLE_RADIUS * (MAX_SPEED - MIN_SPEED)
     return speed
 }
+
+export const MAX_SERVER_MSG_PERIOD = 2  // seconds
