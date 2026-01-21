@@ -88,8 +88,8 @@ class Bubble {
         this.Coordinate[0] += this.Direction[0] * dist
         this.Coordinate[1] += this.Direction[1] * dist
         console.log('Moved bubble', this.ID, 'to', this.Coordinate)
-        this.Coordinate[0] = Math.min(X_MAX, Math.max(-X_MAX, this.Direction[0]))
-        this.Coordinate[1] = Math.min(Y_MAX, Math.max(-Y_MAX, this.Direction[1]))
+        this.Coordinate[0] = Math.min(X_MAX, Math.max(-X_MAX, this.Coordinate[0]))
+        this.Coordinate[1] = Math.min(Y_MAX, Math.max(-Y_MAX, this.Coordinate[1]))
         console.log('Clamped bubble', this.ID, 'to', this.Coordinate)
     }
 
@@ -224,8 +224,8 @@ export class Game {
     }
 
     MoveAllBubbles(delta_sec: number) {
-        for (const bubble of this.Bubbles.values()) {
-            bubble.Move(delta_sec)
+        for (const user_id of this.Players) {
+            this.Bubbles.get(user_id).Move(delta_sec)
         }
     }
 
