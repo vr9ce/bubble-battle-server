@@ -6,7 +6,7 @@ import type {
 import {
     INIT_NUM_NPC_BUBBLES,
     MAP_HEIGHT, MAP_WIDTH,
-    GAME_TICKS,
+    GAME_TICK_PERIOD_MS,
     PLAYER_INIT_RADIUS,
 } from './config.js'
 
@@ -49,13 +49,10 @@ export class Game {
                 Bubbles: Object.fromEntries(this.Bubbles),
                 Players: Array.from(this.Players),
             }),
-            1000 / GAME_TICKS
+            GAME_TICK_PERIOD_MS
         )
     }
     Execute(cmd: ClientMessage) {
-        //const timestamp
-        //const {
 
-        //}
     }
 }

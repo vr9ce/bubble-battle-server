@@ -1,6 +1,7 @@
 export const WEBSOCKET_PORT = 6666
 
 export const GAME_TICKS = 10
+export const GAME_TICK_PERIOD_MS = 1000 / GAME_TICKS
 
 export const [MAP_WIDTH, MAP_HEIGHT] = [500, 500]
 export const [X_MAX, Y_MAX] = [MAP_WIDTH, MAP_HEIGHT].map(v => v / 2)

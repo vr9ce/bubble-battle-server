@@ -12,7 +12,10 @@ import {Game} from './game.js'
 const sockets = new Set<WebSocket>()
 function Broadcast(msg: ServerMessageRaw) {
     for (const ws of sockets)
-        ws.send(JSON.stringify({...msg, Timestamp: Date.now()} as ServerMessage))
+        ws.send(JSON.stringify({
+            ...msg,
+            Timestamp: Date.now(),
+        } as ServerMessage))
 }
 
 
