@@ -232,7 +232,8 @@ export class Game {
     LetBubblesEatEachOther(): ReadonlySet<string> {
         const dead_bubbles = new Set<string>
 
-        for (const eater of this.Bubbles.values()) {
+        for (const user_id of this.Players) {
+            const eater = this.Bubbles.get(user_id)
             for (const eaten of this.Bubbles.values()) {
                 if (eater.TryEat(eaten)) {
                     dead_bubbles.add(eaten.ID)
