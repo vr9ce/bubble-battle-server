@@ -79,6 +79,9 @@ class Bubble {
     }
 
     Move(delta_sec: number) {
+        if (this.EatenBy != undefined)
+            return
+
         if (this.Speed == 0)
             return
         const dist = this.Speed * delta_sec
