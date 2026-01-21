@@ -12,6 +12,7 @@ import {
     MAX_SERVER_MSG_PERIOD,
     GetSpeedByRadius,
     PLAYER_INIT_RADIUS,
+    X_MAX, Y_MAX,
 } from './config.js'
 
 class Bubble {
@@ -83,8 +84,11 @@ class Bubble {
         const dist = this.Speed * delta_sec
 
         this.NormalizeDirection()
+
         this.Coordinate[0] += this.Direction[0] * dist
         this.Coordinate[1] += this.Direction[1] * dist
+        this.Coordinate[0] = Math.min(X_MAX, Math.max(-X_MAX, this.Direction[0] * dist))
+        this.Coordinate[1] = Math.min(Y_MAX, Math.max(-Y_MAX, this.Direction[1] * dist))
     }
 
     NormalizeDirection() {
