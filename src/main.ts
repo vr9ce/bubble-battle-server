@@ -41,3 +41,4 @@ new WebSocketServer({
         }
     }
 }())
+game.Start()
