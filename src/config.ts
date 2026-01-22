@@ -12,7 +12,7 @@ export const MAX_BUBBLE_RADIUS = MAP_HEIGHT
 export const PLAYER_INIT_RADIUS = 10
 
 export const INIT_NUM_NPC_BUBBLES = Math.floor(
-    (MAP_WIDTH * MAP_HEIGHT) / (PLAYER_INIT_RADIUS ** 2) / 800
+    (MAP_WIDTH * MAP_HEIGHT) / (PLAYER_INIT_RADIUS ** 2) / 200
 )
 
 export const STOMACH_RADIUS_RATIO = 0.6
