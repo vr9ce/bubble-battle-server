@@ -23,7 +23,10 @@ function Broadcast(msg: ServerMessageRaw) {
 const game = new Game(Broadcast)
 
 new WebSocketServer({
-    port: WEBSOCKET_PORT
+    port: WEBSOCKET_PORT,
+    verifyClient: ({origin}, done) => {
+        done(true)
+    }
 }).on('connection', function() {
     let cnt: number = 0
     return ws => {
