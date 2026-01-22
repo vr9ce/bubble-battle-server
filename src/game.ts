@@ -11,6 +11,7 @@ import {
     MAX_BUBBLE_RADIUS,
     GetSpeedByRadius,
     PLAYER_INIT_RADIUS,
+    USER_DIRECTION_MAX_STAGNATION_TIME,
     X_MAX, Y_MAX,
 } from './config.js'
 
@@ -101,7 +102,7 @@ class Bubble {
         if (len == 0)
             return
 
-        this.Direction = [dx / len, dy / len]
+        this.Direction = [dx/len, dy/len]
     }
 
     Dump(): BubbleJSON {
@@ -124,10 +125,44 @@ class Bubble {
 class Player {
     readonly ID: string
     readonly Bubble: Bubble
-
     constructor(bubble: Bubble) {
         this.ID = bubble.ID
         this.Bubble = bubble
+    }
+
+    last_cmd_timestamp: number = 0  // UNIX epoch (seconds)
+    private cmd_buffer: ClientMessageRaw[] = []  // Each tick start, only use the latest command, others are discarded.
+    BufferCommand(cmd: ClientMessageRaw) {
+        this.cmd_buffer.push(cmd)
+    }
+    Execute() {
+        const now = Date.now() / 1000
+
+        if (this.cmd_buffer.length == 0) {
+            if (now - this.last_cmd_timestamp > USER_DIRECTION_MAX_STAGNATION_TIME) {
+                this.Bubble.Direction = [0, 0]
+                this.Bubble.Speed = 0
+            }
+            return
+        }
+
+        this.last_cmd_timestamp = now
+        const cmd = this.cmd_buffer[this.cmd_buffer.length - 1]
+        this.cmd_buffer = []
+
+        const {
+            Direction: user_direction,
+        } = cmd.User
+
+        if (String(user_direction) != '0,0') {
+            this.Bubble.Direction = user_direction
+            this.Bubble.Speed = GetSpeedByRadius(this.Bubble.Radius)
+        }
+    }
+
+    AdvanceToNextFrame(delta_sec: number) {
+        this.Bubble.Move(delta_sec)
+        this.Execute()
     }
 }
 
@@ -173,7 +208,9 @@ export class Game {
             const delta_sec = (current_timestamp - last_timestamp) / 1000
             last_timestamp = current_timestamp
 
-            this.MoveAllBubbles(delta_sec)
+            for (const player of this.Players.values()) {
+                player.AdvanceToNextFrame(delta_sec)
+            }
             this.LetBubblesEatEachOther()
 
             this.Updater({
@@ -186,18 +223,12 @@ export class Game {
     Execute(cmd: ClientMessageRaw) {
         const {
             ID: user_id,
-            Direction: user_direction,
         } = cmd.User
 
         if (!this.Players.has(user_id)) {
             this.AddUser(user_id)
         }
-
-        const user_bubble = this.Bubbles.get(user_id)
-        if (String(user_direction) != '0,0') {
-            user_bubble.Direction = user_direction
-            user_bubble.Speed = GetSpeedByRadius(user_bubble.Radius)
-        }
+        this.Players.get(user_id).BufferCommand(cmd)
     }
 
     AddUser(user_id: string) {
@@ -225,12 +256,6 @@ export class Game {
         this.Bubbles.set(user_id, player.Bubble)
         this.Players.set(user_id, player)
         console.log(`Added new player: ID=${user_id}`)
-    }
-
-    MoveAllBubbles(delta_sec: number) {
-        for (const user_id of this.Players.keys()) {
-            this.Bubbles.get(user_id).Move(delta_sec)
-        }
     }
 
     LetBubblesEatEachOther(): ReadonlySet<string> {
