@@ -172,8 +172,31 @@ export class Game {
     readonly Updater: (msg: ServerMessageRaw) => void
 
     constructor(status_reporter: typeof this.Updater) {
-        // init npc bubbles
-        while (this.Bubbles.size < INIT_NUM_NPC_BUBBLES) {
+        this.GenerateNPC(INIT_NUM_NPC_BUBBLES)
+        this.Updater = status_reporter
+    }
+
+    Start() {
+        setInterval(
+            () => this.AdvanceToNextFrame(),
+            GAME_TICK_PERIOD_MS
+        )
+    }
+
+    GetNPCs(): ReadonlySet<string> {
+        const npc_ids = new Set<string>
+        for (const id of this.Bubbles.keys()) {
+            if (!this.Players.has(id)) {
+                npc_ids.add(id)
+            }
+        }
+        return npc_ids
+    }
+
+    GenerateNPC(n: number) {
+        n = Math.floor(n)
+
+        while (n--) {
             const id = Math.random().toString(36).slice(2)
             if (this.Bubbles.has(id))
                 continue
@@ -189,15 +212,28 @@ export class Game {
 
             console.log(`Initialized No.${this.Bubbles.size} NPC, ID=${id}`)
         }
-
-        this.Updater = status_reporter
     }
 
-    Start() {
-        setInterval(
-            () => this.AdvanceToNextFrame(),
-            GAME_TICK_PERIOD_MS
-        )
+    GetLivedNPCs(): ReadonlySet<string> {
+        const lived_npc_ids = new Set<string>
+        for (const id of this.GetNPCs()) {
+            const bubble = this.Bubbles.get(id)
+            if (bubble.EatenBy == undefined) {
+                lived_npc_ids.add(id)
+            }
+        }
+        return lived_npc_ids
+    }
+
+    GetLivedPlayers(): ReadonlySet<string> {
+        const lived_player_ids = new Set<string>
+        for (const id of this.Players.keys()) {
+            const bubble = this.Bubbles.get(id)
+            if (bubble.EatenBy == undefined) {
+                lived_player_ids.add(id)
+            }
+        }
+        return lived_player_ids
     }
 
     AdvanceToNextFrame = (() => {
@@ -213,12 +249,23 @@ export class Game {
             }
             this.LetBubblesEatEachOther()
 
+            if (this.NeedMoreNPC()) {
+                this.GenerateNPC(INIT_NUM_NPC_BUBBLES * Math.random())
+            }
+
             this.Updater({
                 Bubbles: Object.fromEntries([...this.Bubbles].map(([id, bubble]) => [id, bubble.Dump()])),
                 Players: Array.from(this.Players.keys()),
             })
         }
     })()
+
+    NeedMoreNPC(): boolean {
+        const a = this.GetLivedNPCs().size/this.GetLivedPlayers().size < 5
+        const b = this.GetLivedNPCs().size < INIT_NUM_NPC_BUBBLES/2
+
+        return a || b
+    }
 
     Execute(cmd: ClientMessageRaw) {
         const {
