@@ -1,11 +1,11 @@
-export const WEBSOCKET_PORT = 6666
+export const WEBSOCKET_PORT = 16666
 
 export const GAME_TICKS = 10
 export const GAME_TICK_PERIOD_MS = 1000 / GAME_TICKS
 
 export const [MAP_WIDTH, MAP_HEIGHT] = function(x: number, y: number) {
     return [Math.max(x, y), Math.min(x, y)]
-}(1000, 1000)
+}(3000, 3000)
 export const [X_MAX, Y_MAX] = [MAP_WIDTH, MAP_HEIGHT].map(v => v / 2)
 export const MAX_BUBBLE_RADIUS = MAP_HEIGHT
 

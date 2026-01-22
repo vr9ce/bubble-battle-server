@@ -150,46 +150,45 @@ export class Game {
 
     Start() {
         setInterval(
-            () => this.Execute(),
+            () => this.AdvanceToNextFrame(),
             GAME_TICK_PERIOD_MS
         )
     }
 
-    Execute = (() => {
+    AdvanceToNextFrame = (() => {
         let last_timestamp = Date.now()
-        let last_update_timestamp = Date.now()
 
-        return (cmd?: ClientMessageRaw) => {
+        return () => {
             const current_timestamp = Date.now()
             const delta_sec = (current_timestamp - last_timestamp) / 1000
             last_timestamp = current_timestamp
 
             this.MoveAllBubbles(delta_sec)
-            const dead_bubbles = this.LetBubblesEatEachOther()
+            this.LetBubblesEatEachOther()
 
-            if (cmd == undefined) {
-                this.Updater({
-                    Bubbles: Object.fromEntries([...this.Bubbles].map(([id, bubble]) => [id, bubble.Dump()])),
-                    Players: Array.from(this.Players),
-                })
-                last_update_timestamp = current_timestamp
-                return
-            }
-
-            const {
-                ID: user_id,
-                Direction: user_direction,
-            } = cmd.User
-            if (!this.Players.has(user_id)) {
-                this.AddUser(user_id)
-            }
-            const user_bubble = this.Bubbles.get(user_id)
-            if (String(user_direction) != '0,0') {
-                user_bubble.Direction = user_direction
-                user_bubble.Speed = GetSpeedByRadius(user_bubble.Radius)
-            }
+            this.Updater({
+                Bubbles: Object.fromEntries([...this.Bubbles].map(([id, bubble]) => [id, bubble.Dump()])),
+                Players: Array.from(this.Players),
+            })
         }
     })()
+
+    Execute(cmd: ClientMessageRaw) {
+        const {
+            ID: user_id,
+            Direction: user_direction,
+        } = cmd.User
+
+        if (!this.Players.has(user_id)) {
+            this.AddUser(user_id)
+        }
+
+        const user_bubble = this.Bubbles.get(user_id)
+        if (String(user_direction) != '0,0') {
+            user_bubble.Direction = user_direction
+            user_bubble.Speed = GetSpeedByRadius(user_bubble.Radius)
+        }
+    }
 
     AddUser(user_id: string) {
         let user_bubble_coordinate: [number, number]
