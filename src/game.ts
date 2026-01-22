@@ -121,9 +121,19 @@ class Bubble {
     }
 }
 
+class Player {
+    readonly ID: string
+    readonly Bubble: Bubble
+
+    constructor(bubble: Bubble) {
+        this.ID = bubble.ID
+        this.Bubble = bubble
+    }
+}
+
 export class Game {
     readonly Bubbles = new Map<string, Bubble>
-    readonly Players = new Set<string>()
+    readonly Players = new Map<string, Player>
     readonly Updater: (msg: ServerMessageRaw) => void
 
     constructor(status_reporter: typeof this.Updater) {
@@ -168,7 +178,7 @@ export class Game {
 
             this.Updater({
                 Bubbles: Object.fromEntries([...this.Bubbles].map(([id, bubble]) => [id, bubble.Dump()])),
-                Players: Array.from(this.Players),
+                Players: Array.from(this.Players.keys()),
             })
         }
     })()
@@ -211,14 +221,14 @@ export class Game {
             }
         }
 
-        const user_bubble = new Bubble(user_id, PLAYER_INIT_RADIUS, user_bubble_coordinate)
-        this.Bubbles.set(user_id, user_bubble)
-        this.Players.add(user_id)
+        const player = new Player(new Bubble(user_id, PLAYER_INIT_RADIUS, user_bubble_coordinate))
+        this.Bubbles.set(user_id, player.Bubble)
+        this.Players.set(user_id, player)
         console.log(`Added new player: ID=${user_id}`)
     }
 
     MoveAllBubbles(delta_sec: number) {
-        for (const user_id of this.Players) {
+        for (const user_id of this.Players.keys()) {
             this.Bubbles.get(user_id).Move(delta_sec)
         }
     }
@@ -226,7 +236,7 @@ export class Game {
     LetBubblesEatEachOther(): ReadonlySet<string> {
         const dead_bubbles = new Set<string>
 
-        for (const user_id of this.Players) {
+        for (const user_id of this.Players.keys()) {
             const eater = this.Bubbles.get(user_id)
             for (const eaten of this.Bubbles.values()) {
                 if (eater.TryEat(eaten)) {

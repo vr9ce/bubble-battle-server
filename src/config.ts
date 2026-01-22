@@ -12,7 +12,7 @@ export const MAX_BUBBLE_RADIUS = MAP_HEIGHT
 export const PLAYER_INIT_RADIUS = 10
 
 export const INIT_NUM_NPC_BUBBLES = Math.floor(
-    (MAP_WIDTH * MAP_HEIGHT) / (PLAYER_INIT_RADIUS ** 2) / 200
+    (MAP_WIDTH*MAP_HEIGHT) / PLAYER_INIT_RADIUS**2 / 200
 )
 
 export const STOMACH_RADIUS_RATIO = 0.6
@@ -22,6 +22,10 @@ export const STOMACH_RADIUS_RATIO = 0.6
 export function GetSpeedByRadius(radius: number): number {
     const [MIN_SPEED, MAX_SPEED] = [5, 50]
 
-    const speed = MAX_SPEED - radius/MAX_BUBBLE_RADIUS * (MAX_SPEED - MIN_SPEED)
+    const speed = MAX_SPEED - radius/MAX_BUBBLE_RADIUS * (MAX_SPEED-MIN_SPEED)
     return speed
 }
+
+export const USER_DIRECTION_MAX_STAGNATION_TIME = 1  // seconds
+export const USER_DIRECTION_MAX_STAGNATION_TICKS = USER_DIRECTION_MAX_STAGNATION_TIME * GAME_TICKS
+// 如果一个用户在这么长时间内没有更新过自己的移动方向, 则视为停止移动.
