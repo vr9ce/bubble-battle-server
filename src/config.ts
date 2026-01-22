@@ -5,14 +5,14 @@ export const GAME_TICK_PERIOD_MS = 1000 / GAME_TICKS
 
 export const [MAP_WIDTH, MAP_HEIGHT] = function(x: number, y: number) {
     return [Math.max(x, y), Math.min(x, y)]
-}(1000, 1000)
+}(4000, 4000)
 export const [X_MAX, Y_MAX] = [MAP_WIDTH, MAP_HEIGHT].map(v => v / 2)
 export const MAX_BUBBLE_RADIUS = MAP_HEIGHT
 
 export const PLAYER_INIT_RADIUS = 10
 
 export const INIT_NUM_NPC_BUBBLES = Math.floor(
-    (MAP_WIDTH * MAP_HEIGHT) / (PLAYER_INIT_RADIUS ** 2) / 40
+    (MAP_WIDTH * MAP_HEIGHT) / (PLAYER_INIT_RADIUS ** 2) / 800
 )
 
 export const STOMACH_RADIUS_RATIO = 0.6
