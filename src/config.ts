@@ -1,6 +1,6 @@
 export const WEBSOCKET_PORT = 16666
 
-export const GAME_TICKS = 5
+export const GAME_TICKS = 10
 export const GAME_TICK_PERIOD_MS = 1000 / GAME_TICKS
 
 export const [MAP_WIDTH, MAP_HEIGHT] = function(x: number, y: number) {
