@@ -1,5 +1,5 @@
 import {WebSocketServer, type WebSocket} from 'ws'
-import Ajv from "ajv"
+import Ajv from 'ajv'
 import {
     WEBSOCKET_PORT,
 } from './config.js'
@@ -10,7 +10,7 @@ import type {
 } from './proto.js'
 import {Game} from './game.js'
 
-const client_json_validator = new Ajv().compile(
+const client_json_validator = new Ajv.Ajv().compile(
     {
         type: 'object',
         properties: {
