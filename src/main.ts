@@ -36,11 +36,13 @@ const client_json_validator = new Ajv.Ajv().compile(
 
 const sockets = new Set<WebSocket>()
 function Broadcast(msg: ServerMessageRaw) {
-    for (const ws of sockets)
+    for (const ws of sockets) {
         ws.send(JSON.stringify({
             ...msg,
             Timestamp: Date.now(),
         } as ServerMessage))
+        ws.send('\0')
+    }
     console.log('Broadcasted message to', sockets.size, 'clients')
 }
 
