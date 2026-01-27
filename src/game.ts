@@ -196,7 +196,7 @@ export class Game {
         n = Math.floor(n)
 
         while (n--) {
-            const id = Math.random().toString(36).slice(2)
+            const id = 'NPC.' + Math.random().toString(36).slice(2)
             if (this.Bubbles.has(id))
                 continue
 
