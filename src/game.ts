@@ -90,10 +90,12 @@ class Bubble {
 
         this.Coordinate[0] += this.Direction[0] * dist
         this.Coordinate[1] += this.Direction[1] * dist
-        console.log('Moved bubble', this.ID, 'to', this.Coordinate)
+        if (Date.now() % 1000 < GAME_TICK_PERIOD_MS)
+            console.log('Moved bubble', this.ID, 'to', this.Coordinate)
         this.Coordinate[0] = Math.min(X_MAX, Math.max(-X_MAX, this.Coordinate[0]))
         this.Coordinate[1] = Math.min(Y_MAX, Math.max(-Y_MAX, this.Coordinate[1]))
-        console.log('Clamped bubble', this.ID, 'to', this.Coordinate)
+        if (Date.now() % 1000 < GAME_TICK_PERIOD_MS)
+            console.log('Clamped bubble', this.ID, 'to', this.Coordinate)
     }
 
     NormalizeDirection() {
@@ -153,11 +155,8 @@ class Player {
         const {
             Direction: user_direction,
         } = cmd.User
-
-        if (String(user_direction) != '0,0') {
-            this.Bubble.Direction = user_direction
-            this.Bubble.Speed = GetSpeedByRadius(this.Bubble.Radius)
-        }
+        this.Bubble.Direction = user_direction
+        this.Bubble.Speed = GetSpeedByRadius(this.Bubble.Radius)
     }
 
     AdvanceToNextFrame(delta_sec: number) {

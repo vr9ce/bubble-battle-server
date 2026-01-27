@@ -9,6 +9,9 @@ import type {
     ServerMessageRaw,
 } from './proto.js'
 import {Game} from './game.js'
+import {
+    GAME_TICK_PERIOD_MS,
+} from './config.js'
 
 const client_json_validator = new Ajv.Ajv().compile(
     {
@@ -43,7 +46,8 @@ function Broadcast(msg: ServerMessageRaw) {
         } as ServerMessage))
         ws.send('\0')
     }
-    console.log('Broadcasted message to', sockets.size, 'clients')
+    if (Date.now() % 1000 < GAME_TICK_PERIOD_MS)
+        console.log('Broadcasted message to', sockets.size, 'clients')
 }
 
 
@@ -78,7 +82,8 @@ new WebSocketServer({
                 console.warn('Received invalid message from client:', client_json_validator.errors)
                 return
             }
-            console.log('Received message from client:', msg)
+            if (Date.now() % 1000 < GAME_TICK_PERIOD_MS)
+                console.log('Received message from client:', msg)
             game.Execute(msg)
         }
     }
